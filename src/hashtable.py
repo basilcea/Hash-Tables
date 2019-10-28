@@ -15,6 +15,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        self.count = 0
 
 
     def _hash(self, key):
@@ -46,12 +47,31 @@ class HashTable:
     def insert(self, key, value):
         '''
         Store the value with the given key.
+        
 
         Hash collisions should be handled with Linked List Chaining.
 
         Fill this in.
         '''
-        pass
+
+        hashed_key = self._hash_mod(key)
+        if self.count >= self.capacity:
+            self.resize()
+        # for i in range(self.count , hashed_key, -1):
+        #         # Shift everything that is to the right of index over by 1
+        #     self.storage[i] = self.storage[i - 1]
+        #if index = 0 it for loop wont work
+
+        # handle collision
+        if self.storage[hashed_key] is None:
+            self.storage[hashed_key] = LinkedPair(key , value)
+        else:
+           previousEntry = self.storage[hashed_key]
+           if previousEntry.key != key:
+               previousEntry.next =  LinkedPair(key , value)
+        self.count += 1
+  
+
 
 
 
@@ -70,11 +90,14 @@ class HashTable:
         '''
         Retrieve the value stored with the given key.
 
+
         Returns None if the key is not found.
 
         Fill this in.
         '''
-        pass
+        if self.storage(self._hash_mod(key)) is not None:
+            return self.storage(self._hash_mod(key)).value
+        return None
 
 
     def resize(self):
@@ -84,7 +107,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for i in range(self.count):
+            new_storage[i] = self.storage[i]
+        self.storage = new_storage
+        print('here')
+
 
 
 
