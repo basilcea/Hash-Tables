@@ -66,9 +66,6 @@ class HashTable:
                prev.next =  LinkedPair(key , value)
   
 
-
-
-
     def remove(self, key):
         '''
         Remove the value stored with the given key.
@@ -77,7 +74,19 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        hashed_key = self._hash_mod(key)
+        entry = self.storage[hashed_key]
+        prev = None
+        while entry and entry.key != key:
+            prev , entry = entry , entry.next
+        if entry is None:
+            print("Key does not exist")
+        else:
+            if prev is None:
+                self.storage[hashed_key] = entry.next
+            else:
+                prev.next = entry.next
+
 
 
     def retrieve(self, key):
@@ -90,7 +99,6 @@ class HashTable:
         Fill this in.
         '''
         entry = self.storage[self._hash_mod(key)]
-
         if not entry:
             return None
         while entry and entry.key !=key :
